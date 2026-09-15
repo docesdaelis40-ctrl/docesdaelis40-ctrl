@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doces da Eliss — Bolos sob encomenda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Grand+Hotel&family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAF5FC;
+    --ink:#332740;
+    --ink-soft:#7B6D8A;
+    --orchid:#9A5FC7;
+    --orchid-deep:#7A3FA8;
+    --coral:#E8809D;
+    --line:#E9DCF2;
+    --card:#FFFFFF;
+    --radius: 18px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Quicksand',sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{margin:0;font-family:'Baloo 2',sans-serif;}
+  a{color:inherit;}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 20px;}
+
+  .topbar{
+    border-bottom:1px solid var(--line);
+    padding:14px 0;
+    position:sticky;top:0;
+    background:rgba(250,245,252,0.94);
+    backdrop-filter:blur(6px);
+    z-index:50;
+  }
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;}
+  .brand{font-family:'Grand Hotel',cursive;font-size:1.9rem;color:var(--orchid-deep);line-height:1;}
+  .cart-pill{
+    display:flex;align-items:center;gap:8px;
+    background:var(--ink);color:#fff;
+    border:none;border-radius:999px;
+    padding:9px 16px;font-size:0.9rem;font-weight:600;
+    cursor:pointer;font-family:'Quicksand',sans-serif;
+  }
+  .cart-pill:hover{background:var(--orchid-deep);}
+  #cart-count{
+    background:var(--coral);color:#fff;
+    border-radius:999px;min-width:20px;height:20px;
+    display:inline-flex;align-items:center;justify-content:center;
+    font-size:0.75rem;padding:0 5px;
+  }
+
+  .hero{padding:52px 0 40px;text-align:center;}
+  .hero .eyebrow-script{font-family:'Grand Hotel',cursive;font-size:2.6rem;color:var(--orchid-deep);display:block;}
+  .hero h1{font-size:2.2rem;font-weight:800;color:var(--ink);margin-top:-6px;letter-spacing:0.01em;}
+  .hero p{color:var(--ink-soft);font-size:1rem;margin:14px auto 0;max-width:40ch;}
+  .hero .cta{
+    display:inline-block;margin-top:22px;
+    background:var(--coral);color:#fff;
+    padding:13px 28px;border-radius:999px;
+    text-decoration:none;font-weight:700;font-size:0.95rem;
+    font-family:'Baloo 2',sans-serif;
+  }
+  .hero-hearts{font-size:1.3rem;color:var(--coral);margin-top:8px;letter-spacing:6px;}
+
+  .section{padding:36px 0;}
+  .section-head{margin-bottom:10px;text-align:center;}
+  .section-head h2{font-size:1.6rem;font-weight:800;color:var(--orchid-deep);}
+  .section-head span{color:var(--ink-soft);font-size:0.88rem;}
+
+  .size-guide{
+    display:flex;justify-content:center;gap:14px;flex-wrap:wrap;
+    margin:18px 0 30px;
+  }
+  .size-guide div{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:10px 16px;text-align:center;font-size:0.8rem;color:var(--ink-soft);
+    min-width:96px;
+  }
+  .size-guide strong{display:block;font-family:'Baloo 2',sans-serif;font-size:1.1rem;color:var(--orchid-deep);}
+
+  .notice{
+    text-align:center;background:#FBEFF3;border:1px solid #F2D6E0;color:var(--ink-soft);
+    font-size:0.82rem;padding:9px 14px;border-radius:999px;
+    max-width:420px;margin:0 auto 28px;
+  }
+
+  .builder{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px;max-width:520px;margin:0 auto;
+    display:flex;flex-direction:column;gap:18px;
+  }
+  .builder-group label.group-label{
+    display:block;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:0.95rem;
+    color:var(--ink);margin-bottom:9px;
+  }
+  .option-row{display:flex;gap:8px;flex-wrap:wrap;}
+  .option-btn{
+    border:1.5px solid var(--line);background:var(--paper);
+    border-radius:999px;padding:8px 15px;font-size:0.85rem;font-weight:600;
+    cursor:pointer;color:var(--ink-soft);font-family:'Quicksand',sans-serif;
+  }
+  .option-btn.active{background:var(--orchid);border-color:var(--orchid);color:#fff;}
+
+  .builder-summary{
+    background:var(--paper);border:1px dashed var(--line);border-radius:14px;
+    padding:14px 16px;font-size:0.88rem;color:var(--ink-soft);
+  }
+  .builder-summary strong{color:var(--ink);}
+  .builder-price{font-family:'Baloo 2',sans-serif;font-size:1.4rem;color:var(--orchid-deep);margin-top:4px;}
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+    gap:18px;
+  }
+  .product{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:18px;
+    display:flex;flex-direction:column;gap:8px;
+  }
+  .product-name{font-weight:700;font-size:1.05rem;color:var(--ink);}
+  .product-desc{color:var(--ink-soft);font-size:0.82rem;}
+
+  .size-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
+  .size-btn{
+    border:1.5px solid var(--line);background:var(--paper);
+    border-radius:999px;padding:6px 13px;font-size:0.82rem;font-weight:600;
+    cursor:pointer;color:var(--ink-soft);font-family:'Quicksand',sans-serif;
+  }
+  .size-btn.active{background:var(--orchid);border-color:var(--orchid);color:#fff;}
+
+  .price-line{font-family:'Baloo 2',sans-serif;font-size:1.25rem;font-weight:700;color:var(--orchid-deep);margin-top:2px;}
+  .price-note{font-size:0.75rem;color:var(--ink-soft);margin-top:-6px;}
+
+  .product-actions{display:flex;align-items:center;gap:10px;margin-top:6px;}
+  .qty-control{
+    display:flex;align-items:center;border:1px solid var(--line);
+    border-radius:999px;overflow:hidden;
+  }
+  .qty-control button{
+    width:30px;height:30px;border:none;background:transparent;
+    font-size:1rem;cursor:pointer;color:var(--ink);
+  }
+  .qty-control button:hover{background:var(--paper);}
+  .qty-control span{width:24px;text-align:center;font-size:0.9rem;}
+  .add-btn{
+    flex:1;background:var(--ink);color:#fff;
+    border:none;border-radius:999px;padding:9px 14px;
+    font-weight:700;font-size:0.85rem;cursor:pointer;font-family:'Baloo 2',sans-serif;
+  }
+  .add-btn:hover{background:var(--orchid-deep);}
+  .add-btn.added{background:#6FAE72;}
+
+  #order-panel{
+    position:fixed;top:0;right:0;height:100%;width:min(400px,100%);
+    background:var(--paper);
+    border-left:1px solid var(--line);
+    transform:translateX(100%);
+    transition:transform 0.3s ease;
+    z-index:100;
+    display:flex;flex-direction:column;
+    box-shadow:-8px 0 24px rgba(90,50,120,0.12);
+  }
+  #order-panel.open{transform:translateX(0);}
+  .panel-header{
+    padding:20px;border-bottom:1px solid var(--line);
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .panel-header h3{font-size:1.15rem;color:var(--orchid-deep);}
+  .close-btn{background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--ink-soft);}
+  .panel-body{padding:20px;overflow-y:auto;flex:1;}
+  .cart-item{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:10px 0;border-bottom:1px solid var(--line);
+    font-size:0.88rem;
+  }
+  .cart-item .name{font-weight:700;}
+  .cart-item .meta{color:var(--ink-soft);font-size:0.8rem;}
+  .cart-item .remove{background:none;border:none;color:var(--ink-soft);cursor:pointer;font-size:0.82rem;}
+  .empty-msg{color:var(--ink-soft);font-size:0.9rem;padding:30px 0;text-align:center;}
+
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-size:0.8rem;font-weight:700;margin-bottom:5px;color:var(--ink-soft);}
+  .field input,.field textarea{
+    width:100%;padding:10px 12px;border:1px solid var(--line);
+    border-radius:10px;font-family:'Quicksand',sans-serif;font-size:0.92rem;
+    background:var(--card);color:var(--ink);
+  }
+  .field textarea{resize:vertical;min-height:56px;}
+
+  .panel-footer{
+    padding:18px 20px;border-top:1px solid var(--line);
+    background:var(--card);
+  }
+  .total-row{display:flex;justify-content:space-between;font-size:1rem;margin-bottom:14px;}
+  .total-row strong{font-family:'Baloo 2',sans-serif;font-size:1.3rem;color:var(--orchid-deep);}
+  .whatsapp-btn{
+    width:100%;background:#25D366;color:#fff;border:none;
+    padding:14px;border-radius:999px;font-weight:700;font-size:0.98rem;
+    cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;
+    font-family:'Baloo 2',sans-serif;
+  }
+  .whatsapp-btn:hover{background:#1EBE5A;}
+  .whatsapp-btn:disabled{background:#CBB9D9;cursor:not-allowed;}
+  .hint{font-size:0.76rem;color:var(--ink-soft);margin-top:10px;text-align:center;}
+
+  #overlay{
+    position:fixed;inset:0;background:rgba(60,40,80,0.3);
+    opacity:0;pointer-events:none;transition:opacity 0.3s ease;z-index:90;
+  }
+  #overlay.open{opacity:1;pointer-events:auto;}
+
+  footer{padding:30px 0;text-align:center;color:var(--ink-soft);font-size:0.85rem;border-top:1px solid var(--line);}
+  footer .insta{color:var(--orchid-deep);font-weight:700;text-decoration:none;}
+  footer .addr{margin-top:4px;font-size:0.8rem;}
+
+  @media (max-width:500px){
+    .hero h1{font-size:1.7rem;}
+    .brand{font-size:1.6rem;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <div class="brand">Doces da Eliss</div>
+    <button class="cart-pill" onclick="openPanel()">
+      Meu pedido <span id="cart-count">0</span>
+    </button>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow-script">Bolos sob</span>
+    <h1>ENCOMENDA</h1>
+    <p>Escolha o recheio e o tamanho ideal pra sua festa. Todos feitos na hora do seu pedido.</p>
+    <a href="#catalogo" class="cta">Ver bolos</a>
+    <div class="hero-hearts">♥ ♥ ♥</div>
+    <p style="font-size:0.78rem;color:var(--ink-soft);margin-top:14px;">Obs: não trabalhamos com pasta americana.</p>
+  </div>
+</section>
+
+<section class="section" id="catalogo">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Nossos bolos</h2>
+      <span>Escolha o recheio, toque no tamanho e adicione ao pedido</span>
+    </div>
+
+    <div class="size-guide">
+      <div><strong>10 cm</strong>serve até 10</div>
+      <div><strong>15 cm</strong>serve até 20</div>
+      <div><strong>20 cm</strong>serve até 30</div>
+      <div><strong>25 cm</strong>serve até 45</div>
+    </div>
+
+    <div class="notice">Não trabalhamos com pasta americana.</div>
+
+    <div class="builder" id="builder"></div>
+  </div>
+</section>
+
+<footer>
+  <div>Feito com carinho por Doces da Eliss ♥</div>
+  <div><a class="insta" href="https://instagram.com/doces_da_eliss" target="_blank">@doces_da_eliss</a></div>
+  <div class="addr">R. Osmarino Novaes, 286 — Pte. Alta, Volta Redonda</div>
+</footer>
+
+<div id="overlay" onclick="closePanel()"></div>
+
+<div id="order-panel">
+  <div class="panel-header">
+    <h3>Seu pedido</h3>
+    <button class="close-btn" onclick="closePanel()">&times;</button>
+  </div>
+  <div class="panel-body">
+    <div id="cart-items"><div class="empty-msg">Seu carrinho está vazio.<br>Adicione um bolo para continuar.</div></div>
+
+    <div style="margin-top:22px;">
+      <div class="field">
+        <label for="cust-name">Seu nome</label>
+        <input type="text" id="cust-name" placeholder="Como podemos te chamar?">
+      </div>
+      <div class="field">
+        <label for="cust-date">Data desejada da entrega/retirada</label>
+        <input type="text" id="cust-date" placeholder="Ex: 20/09, sábado">
+      </div>
+      <div class="field">
+        <label for="cust-address">Endereço para entrega (opcional)</label>
+        <textarea id="cust-address" placeholder="Rua, número, bairro, cidade"></textarea>
+      </div>
+      <div class="field">
+        <label for="cust-note">Observação</label>
+        <textarea id="cust-note" placeholder="Recheio, decoração, forma de pagamento..."></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="panel-footer">
+    <div class="total-row"><span>Total</span><strong id="cart-total">R$ 0,00</strong></div>
+    <button class="whatsapp-btn" id="send-btn" onclick="sendToWhatsApp()" disabled>
+      Enviar pedido pelo WhatsApp
+    </button>
+    <div class="hint">Você será direcionado ao WhatsApp com o pedido já preenchido.</div>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   Dados da loja — edite aqui se algo mudar
+   ========================================================= */
+const WHATSAPP_NUMBER = "5524999408489"; // (24) 99940-8489
+
+// Tamanhos disponíveis (mesmos para todos os sabores) e preços sugeridos — baratos, estilo bolo caseiro.
+// Ajuste os valores como quiser: quanto maior o bolo, maior o preço.
+const SIZES = [
+  { label: "10 cm", price: 35.00 },
+  { label: "15 cm", price: 55.00 },
+  { label: "20 cm", price: 80.00 },
+  { label: "25 cm", price: 120.00 },
+];
+
+// Massas (sabor da base do bolo) — edite, remova ou adicione à vontade.
+const MASSAS = ["Massa branca", "Cenoura", "Chocolate", "Outro (combinar)"];
+
+// Recheios disponíveis — edite, remova ou adicione à vontade.
+const RECHEIOS = ["Brigadeiro tradicional", "Brigadeiro de maracujá", "Ninho", "Outro (combinar)"];
+
+/* ========================================================= */
+
+const cart = {}; // key -> {massa, recheio, sizeLabel, price, qty}
+let sel = { massaIdx: 0, recheioIdx: 0, sizeIdx: 0, qty: 1 };
+
+function formatBRL(v){
+  return v.toLocaleString('pt-BR', { style:'currency', currency:'BRL' });
+}
+
+function renderOptionRow(items, selectedIdx, onClickName){
+  return items.map((label, i) =>
+    `<button type="button" class="option-btn ${i===selectedIdx?'active':''}" onclick="${onClickName}(${i})">${label}</button>`
+  ).join('');
+}
+
+function renderProducts(){
+  const el = document.getElementById('builder');
+  const price = SIZES[sel.sizeIdx].price;
+  el.innerHTML = `
+    <div class="builder-group">
+      <label class="group-label">1. Escolha a massa</label>
+      <div class="option-row">${renderOptionRow(MASSAS, sel.massaIdx, 'pickMassa')}</div>
+    </div>
+    <div class="builder-group">
+      <label class="group-label">2. Escolha o recheio</label>
+      <div class="option-row">${renderOptionRow(RECHEIOS, sel.recheioIdx, 'pickRecheio')}</div>
+    </div>
+    <div class="builder-group">
+      <label class="group-label">3. Escolha o tamanho</label>
+      <div class="option-row">${renderOptionRow(SIZES.map(s => s.label), sel.sizeIdx, 'pickSize')}</div>
+    </div>
+    <div class="builder-summary">
+      <div><strong>${MASSAS[sel.massaIdx]}</strong> com <strong>${RECHEIOS[sel.recheioIdx]}</strong>, ${SIZES[sel.sizeIdx].label}</div>
+      <div class="builder-price">${formatBRL(price)}</div>
+    </div>
+    <div class="product-actions">
+      <div class="qty-control">
+        <button type="button" onclick="changeQty(-1)">−</button>
+        <span id="qty-display">${sel.qty}</span>
+        <button type="button" onclick="changeQty(1)">+</button>
+      </div>
+      <button class="add-btn" id="add-btn" onclick="addToCart()">Adicionar ao pedido</button>
+    </div>
+  `;
+}
+
+function pickMassa(i){ sel.massaIdx = i; renderProducts(); }
+function pickRecheio(i){ sel.recheioIdx = i; renderProducts(); }
+function pickSize(i){ sel.sizeIdx = i; renderProducts(); }
+
+function changeQty(delta){
+  sel.qty = Math.max(1, sel.qty + delta);
+  document.getElementById('qty-display').textContent = sel.qty;
+}
+
+function addToCart(){
+  const massa = MASSAS[sel.massaIdx];
+  const recheio = RECHEIOS[sel.recheioIdx];
+  const size = SIZES[sel.sizeIdx];
+  const key = `${massa}|${recheio}|${size.label}`;
+
+  if (cart[key]){
+    cart[key].qty += sel.qty;
+  } else {
+    cart[key] = { massa, recheio, sizeLabel: size.label, price: size.price, qty: sel.qty };
+  }
+
+  sel.qty = 1;
+  renderProducts();
+
+  const btn = document.getElementById('add-btn');
+  btn.textContent = 'Adicionado ✓';
+  btn.classList.add('added');
+  setTimeout(() => { btn.textContent = 'Adicionar ao pedido'; btn.classList.remove('added'); }, 1200);
+
+  renderCart();
+  openPanel();
+}
+
+function removeFromCart(key){
+  delete cart[key];
+  renderCart();
+}
+
+function renderCart(){
+  const itemsEl = document.getElementById('cart-items');
+  const keys = Object.keys(cart);
+  let total = 0;
+  let count = 0;
+
+  if (keys.length === 0){
+    itemsEl.innerHTML = '<div class="empty-msg">Seu carrinho está vazio.<br>Adicione um bolo para continuar.</div>';
+  } else {
+    itemsEl.innerHTML = keys.map(key => {
+      const item = cart[key];
+      const subtotal = item.price * item.qty;
+      total += subtotal;
+      count += item.qty;
+      return `
+        <div class="cart-item">
+          <div>
+            <div class="name">${item.massa} c/ ${item.recheio} (${item.sizeLabel})</div>
+            <div class="meta">${item.qty} × ${formatBRL(item.price)} = ${formatBRL(subtotal)}</div>
+          </div>
+          <button class="remove" onclick="removeFromCart('${key}')">remover</button>
+        </div>
+      `;
+    }).join('');
+  }
+
+  document.getElementById('cart-count').textContent = count;
+  document.getElementById('cart-total').textContent = formatBRL(total);
+  document.getElementById('send-btn').disabled = keys.length === 0;
+}
+
+function openPanel(){
+  document.getElementById('order-panel').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+}
+function closePanel(){
+  document.getElementById('order-panel').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+
+function sendToWhatsApp(){
+  const keys = Object.keys(cart);
+  if (keys.length === 0) return;
+
+  const name = document.getElementById('cust-name').value.trim();
+  const date = document.getElementById('cust-date').value.trim();
+  const address = document.getElementById('cust-address').value.trim();
+  const note = document.getElementById('cust-note').value.trim();
+
+  let total = 0;
+  let lines = [];
+  keys.forEach(key => {
+    const item = cart[key];
+    const subtotal = item.price * item.qty;
+    total += subtotal;
+    lines.push(`• ${item.qty}x Bolo ${item.massa} c/ recheio ${item.recheio} (${item.sizeLabel}) — ${formatBRL(subtotal)}`);
+  });
+
+  let msg = `Olá! Quero encomendar o(s) seguinte(s) bolo(s):\n\n`;
+  msg += lines.join('\n');
+  msg += `\n\nTotal: ${formatBRL(total)}`;
+  if (name) msg += `\n\nNome: ${name}`;
+  if (date) msg += `\nData desejada: ${date}`;
+  if (address) msg += `\nEndereço: ${address}`;
+  if (note) msg += `\nObservação: ${note}`;
+
+  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+}
+
+renderProducts();
+renderCart();
+</script>
+
+</body>
+</html>
